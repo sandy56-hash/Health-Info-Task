@@ -97,13 +97,15 @@ These tests cover: Client registration (including duplicate registration and inv
 
 Client enrollment (including invalid program and duplicate enrollment)
 
-Client searchViewing client profiles
+Client search
+
+Viewing client profiles
 
 
 Future Enhancements:
 
-Implement a full-fledged backend using a web framework (e.g., Flask).Integrate with a database (e.g., PostgreSQL).
+Implement a full-fledged backend using a web framework (e.g., Flask). Integrate with a database (e.g., PostgreSQL).
 
-Implement user authentication and authorization.Add more comprehensive error handling.
+Implement user authentication and authorization. Add more comprehensive error handling.
 
-Implement a more robust front-end.Add unit tests.Deploy the application.
+Implement a more robust front-end. Add unit tests. Deploy the application.
