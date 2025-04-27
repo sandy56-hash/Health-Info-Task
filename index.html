@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Empowering Health - Your Information Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            transition: background-color 0.5s ease;
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        body:hover {
+            background-color: #e0f7fa;
+        }
+
+        .top-left-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            background-color: #f0f4f8;
+            z-index: 10;
+            border-bottom: 1px solid #a6cbe3;
+            width: 100%;
+            height: auto;
+            box-sizing: border-box;
+            justify-content: space-between;
+            transition: background-color 0.3s ease;
+        }
+
+        .top-left-nav:hover {
+            background-color: #d0ebff;
+        }
+
+        .top-left-nav a {
+            margin-left: 1rem;
+            color: #3498db;
+            text-decoration: none;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .top-left-nav a:hover {
+            color: #217dbb;
+        }
+
+        .top-left-nav .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0;
+        }
+
+        .top-left-nav .logo i {
+            font-size: 1.5rem;
+            color: #e74c3c;
+            transition: color 0.3s ease;
+        }
+
+        .top-left-nav .logo i:hover {
+            color: #c0392b;
+        }
+
+        .main-nav {
+            display: none;
+        }
+
+        .container {
+            margin-top: 5rem;
+            margin-left: 0;
+            padding-top: 2rem;
+            box-sizing: border-box;
+        }
+
+        @media (max-width: 768px) {
+            .top-left-nav {
+                flex-direction: row;
+                justify-content: space-around;
+                border-bottom: 1px solid #a6cbe3;
+                padding: 0.5rem;
+            }
+
+            .top-left-nav a {
+                margin-bottom: 0;
+                margin-left: 0.5rem;
+            }
+
+            .container {
+                margin-top: 4rem;
+                padding-top: 1rem;
+            }
+
+            .top-left-nav .logo {
+                display: flex;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .top-left-nav a {
+                font-size: 0.8rem;
+                gap: 0.2rem;
+            }
+        }
+
+        .moving-content-container {
+            width: 100%;
+            overflow: hidden;
+            background-color: #e0f7fa;
+            padding: 1rem 0;
+            margin-bottom: 2rem;
+        }
+
+        .moving-content {
+            display: flex;
+            animation: moveContent 20s linear infinite; /* Animation name, duration, timing function, and iteration count */
+            white-space: nowrap;  /* Prevent text from wrapping */
+            padding-left: 100%; /* Start the text from the right edge of the container */
+        }
+
+        .moving-content p {
+            margin: 0 2rem;
+            font-size: 1.2rem;
+            color: #0d47a1;
+            font-weight: 500;
+        }
+
+        @keyframes moveContent {
+            0% {
+                transform: translateX(0%);        /* Start at the right edge */
+            }
+
+            100% {
+                transform: translateX(-100%);   /* Move all the way to the left */
+            }
+        }
+
+        .call-to-action {
+            background-color: #3498db;
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 1.5rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .call-to-action:hover {
+            background-color: #217dbb;
+        }
+
+        .module {
+            background-color: white;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e0e0e0;
+            transition: background-color 0.3s ease;
+        }
+
+        .module:hover {
+            background-color: #f5f5f5;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #0d47a1;
+            margin-bottom: 0.75rem;
+        }
+
+        .form-group input[type="text"],
+        .form-group input[type="date"],
+        .form-group select,
+        .form-group textarea {
+            width: 70%;
+            padding: 0.8rem;
+            border: 1px solid #a6cbe3;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            color: #34495e;
+            transition: border-color 0.2s ease;
+            box-sizing: border-box;
+        }
+
+        .form-group input[type="text"]:focus,
+        .form-group input[type="date"]:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-group select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3Cpath d='M0 0h24v24H0z' fill='none'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            background-size: 1em;
+            cursor: pointer;
+        }
+
+        .action-button {
+            background-color: #2ecc71;
+            color: white;
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 1rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .action-button:hover {
+            background-color: #27ae60;
+        }
+
+        .notification {
+            margin-top: 2rem;
+            padding: 1.2rem;
+            border-radius: 0.5rem;
+            text-align: center;
+            font-weight: 500;
+            border: 1px solid;
+        }
+
+        .notification.success {
+            background-color: #e3fcec;
+            color: #2c662d;
+            border-color: #b1e5b5;
+        }
+
+        .notification.error {
+            background-color: #fce3e3;
+            color: #c0392b;
+            border-color: #f6baba;
+        }
+
+        .notification.hidden {
+            display: none;
+        }
+
+        .data-display {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background-color: #f9f9f9;
+            border-radius: 0.5rem;
+            border: 1px solid #d3d3d3;
+        }
+
+        .data-display h3 {
+            font-size: 1.5rem;
+            color: #34495e;
+            margin-bottom: 1rem;
+            border-bottom: 2px solid #a6cbe3;
+            padding-bottom: 0.5rem;
+        }
+
+        .data-display ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .data-display ul li {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #e0e0e0;
+            font-size: 1rem;
+            color: #555;
+        }
+
+        .data-display ul li:last-child {
+            border-bottom: none;
+        }
+
+        #client-profile {
+            line-height: 1.8;
+        }
+
+        #client-profile h3 {
+            color: #2c3e50;
+        }
+
+        #client-profile p {
+            margin-bottom: 0.75rem;
+        }
+
+        footer {
+            background-color: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            margin-top: 3rem;
+            border-top: 2px solid #a6cbe3;
+        }
+
+        .hero {
+            background-color: #f0f8ff;
+            padding: 2rem;
+            border-radius: 0.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            transition: background-color 0.3s ease;
+        }
+
+        .hero:hover {
+            background-color: #e0f7fa;
+        }
+
+        .hero-content h1 {
+            font-size: 2.2rem;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            color: #34495e;
+            margin-bottom: 1.5rem;
+        }
+        @media (max-width: 768px) {
+        .container {
+            margin-top: 4rem;
+            padding-top: 1rem;
+        }
+        .top-left-nav {
+            flex-direction: row;
+            justify-content: space-around;
+        }
+        .top-left-nav a {
+            margin-left: 0.5rem;
+            margin-right: 0.5rem;
+        }
+        .moving-content p{
+            font-size: 1rem;
+        }
+    }
+    @media (max-width: 480px) {
+        .top-left-nav {
+            flex-direction: column;
+        }
+        .top-left-nav a{
+            margin-left: 0.2rem;
+            margin-right: 0.2rem;
+        }
+        .hero-content h1{
+            font-size: 1.8rem;
+        }
+        .hero-content p{
+            font-size: 1rem;
+        }
+    }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="main-nav">
+            <div class="logo">
+                <i class="fas fa-heartbeat"></i>
+                <span>Health Info Connect</span>
+            </div>
+            <ul>
+                <li><a href="#client-management"><i class="fas fa-user-plus"></i> Clients</a></li>
+                <li><a href="#enrollment-management"><i class="fas fa-link"></i> Enrollment</a></li>
+                <li><a href="#search-records"><i class="fas fa-search"></i> Search</a></li>
+                <li><a href="#view-profile"><i class="fas fa-user-circle"></i> Profile</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <nav class="top-left-nav">
+        <div class="logo">
+            <i class="fas fa-heartbeat"></i>
+            <span>Health Info Connect</span>
+        </div>
+        <div style="display: flex;">
+            <a href="#client-management"><i class="fas fa-user-plus"></i> Clients</a>
+            <a href="#enrollment-management"><i class="fas fa-link"></i> Enrollment</a>
+            <a href="#search-records"><i class="fas fa-search"></i> Search</a>
+            <a href="#view-profile"><i class="fas fa-user-circle"></i> Profile</a>
+        </div>
+    </nav>
+
+    <div class="moving-content-container">
+        <div class="moving-content">
+            <p>Welcome to Health Info Connect!</p>
+            <p>Manage client records efficiently.</p>
+            <p>Search client information quickly.</p>
+            
+  
+        </div>
+    </div>
+
+    <div class="moving-content-container">
+        <div class="moving-content">
+            <p>Welcome to Health Info Connect!</p>
+            <p>Manage client records efficiently.</p>
+            <p>Search client information quickly.</p>
+            
+           
+        </div>
+    </div>
+
+    <main class="container">
+        <section class="hero">
+            <div class="hero-content">
+                <h1>Your Central Hub for Health Information</h1>
+                
+                <p>Our platform is designed to help healthcare professionals manage client records, program enrollments, and access critical information quickly and easily.</p>
+                <button class="call-to-action">Explore Features <i class="fas fa-arrow-down"></i></button>
+            </div>
+        </section>
+
+        <div id="message-box" class="notification hidden">
+        </div>
+
+        <section id="enrollment-management" class="module">
+            <h2><i class="fas fa-link"></i> Client Enrollment in Health Programs</h2>
+            <p class="section-intro">Enroll existing clients into relevant health programs by selecting from the available options.</p>
+            <form id="enroll-program-form" class="input-form">
+                <div class="form-group">
+                    <label for="enroll-client-id-program"><i class="fas fa-user"></i> Client ID:</label>
+                    <input type="text" id="enroll-client-id-program" placeholder="Enter Client ID" required>
+                </div>
+                <div class="form-group">
+                    <label for="selected-program"><i class="fas fa-list-alt"></i> Select Program:</label>
+                    <select id="selected-program" required>
+                        <option value="" disabled selected>Choose a Program</option>
+                        <option value="TB Program">TB Program</option>
+                        <option value="Malaria Program">Malaria Program</option>
+                        <option value="HIV Program">HIV Program</option>
+                        <option value="Diabetes Management Program">Diabetes Management Program</option>
+                        <option value="Hypertension Control Program">Hypertension Control Program</option>
+                        <option value="Maternal Health Program">Maternal Health Program</option>
+                        <option value="Child Wellness Program">Child Wellness Program</option>
+                        <option value="Asthma Care Program">Asthma Care Program</option>
+                        <option value="Cancer Screening Program">Cancer Screening Program</option>
+                        <option value="Mental Health Support Program">Mental Health Support Program</option>
+                        <option value="Substance Abuse Program">Substance Abuse Program</option>
+                        <option value="Nutrition Counseling Program">Nutrition Counseling Program</option>
+                        <option value="Immunization Program">Immunization Program</option>
+                        <option value="Eye Care Program">Eye Care Program</option>
+                        <option value="Dental Health Program">Dental Health Program</option>
+                        <option value="Cardiovascular Health Program">Cardiovascular Health Program</option>
+                        <option value="Respiratory Health Program">Respiratory Health Program</option>
+                        <option value="Geriatric Care Program">Geriatric Care Program</option>
+                        <option value="Pediatric Care Program">Pediatric Care Program</option>
+                        <option value="Emergency Care Training">Emergency Care Training</option>
+                    </select>
+                </div>
+                <button type="submit" class="action-button"><i class="fas fa-check-circle"></i> Enroll Client</button>
+            </form>
+        </section>
+
+        <section id="client-management" class="module">
+            <h2><i class="fas fa-user-plus"></i> Client Management</h2>
+            <p class="section-intro">Register new clients into the system by providing the necessary details.</p>
+            <form id="register-client-form" class="input-form">
+                <div class="form-group">
+                    <label for="client-id"><i class="fas fa-id-card"></i> Client ID:</label>
+                    <input type="text" id="client-id" placeholder="Unique Client Identifier" required>
+                </div>
+                <div class="form-group">
+                    <label for="client-name"><i class="fas fa-signature"></i> Name:</label>
+                    <input type="text" id="client-name" placeholder="Client's Full Name" required>
+                </div>
+                <div class="form-group">
+                    <label for="client-dob"><i class="fas fa-calendar-alt"></i> Date of Birth:</label>
+                    <input type="date" id="client-dob" required>
+                </div>
+                <div class="form-group">
+                    <label for="client-contact"><i class="fas fa-phone"></i> Contact Info:</label>
+                    <input type="text" id="client-contact" placeholder="Phone number or other contact" required>
+                </div>
+                <button type="submit" class="action-button"><i class="fas fa-user-check"></i> Register Client</button>
+            </form>
+        </section>
+
+        <section id="search-records" class="module">
+            <h2><i class="fas fa-search"></i> Search Client Records</h2>
+            <p class="section-intro">Quickly find client information by entering their ID or name.</p>
+            <form id="search-client-form" class="input-form">
+                <div class="form-group">
+                    <label for="search-term"><i class="fas fa-search"></i> Search by ID or Name:</label>
+                    <input type="text" id="search-term" placeholder="Enter Client ID or Name" required>
+                </div>
+                <button type="submit" class="action-button"><i class="fas fa-binoculars"></i> Search</button>
+            </form>
+            <div id="search-results" class="data-display hidden">
+                <h3><i class="fas fa-list"></i> Search Results:</h3>
+                <ul id="search-results-list">
+                </ul>
+            </div>
+        </section>
+
+        <section id="view-profile" class="module">
+            <h2><i class="fas fa-user-circle"></i> View Client Profile</h2>
+            <p class="section-intro">Retrieve and display detailed information for a specific client using their ID.</p>
+            <form id="view-profile-form" class="input-form">
+                <div class="form-group">
+                    <label for="profile-client-id"><i class="fas fa-id-card-alt"></i> Client ID to View:</label>
+                    <input type="text" id="profile-client-id" placeholder="Enter Client ID to view profile" required>
+                </div>
+                <button type="submit" class="action-button"><i class="fas fa-eye"></i> View Profile</button>
+            </form>
+            <div id="client-profile" class="data-display hidden">
+                <h3><i class="fas fa-address-card"></i> Client Profile:</h3>
+                <div id="profile-details">
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Health Info Connect. All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.body.addEventListener('mouseover', () => {
+            document.body.style.backgroundColor = '#f0f8ff';
+        });
+
+        const modules = document.querySelectorAll('.module');
+        modules.forEach(module => {
+            module.addEventListener('click', () => {
+                const randomColor = ['#e0f7fa', '#b0e0e6', '#87cefa', '#4682b4', '#00008b'][Math.floor(Math.random() * 5)];
+                // Ensure only light shades are used.
+                const lightColor = ['#e0f7fa', '#b0e0e6', '#87cefa'][Math.floor(Math.random() * 3)];
+                module.style.backgroundColor = lightColor;
+            });
+        });
+
+        const navLinks = document.querySelectorAll('.top-left-nav a');
+        navLinks.forEach(link => {
+            link.addEventListener('click', (event) => {
+                event.preventDefault();
+                const targetId = link.getAttribute('href').substring(1);
+                const targetElement = document.getElementById(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
