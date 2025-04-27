@@ -7,7 +7,8 @@ This system allows healthcare providers to:
            Search for clients.
            View client profiles, including program enrollments.
            Expose client profiles via an API.
-This project was developed as a demonstration of software development skills, emphasizing clean code, clear documentation, and a practical approach to addressing the given challenge.
+This project was developed as a demonstration of software development skills, emphasizing clean code, clear documentation, 
+and a practical approach to addressing the given challenge.
 Features:
              Client Management:Register new clients with essential information (name, date of birth, contact information). Unique client identifiers are automatically generated. 
              Program Management:Define and manage health programs (e.g., TB, Malaria, HIV).
@@ -33,7 +34,7 @@ Design Choices and Implementation
                API (Simulated):Python functions are used to represent API endpoints for retrieving client data.
                Error Handling: The Python code includes basic error handling and input validation.
                Data Storage: For simplicity, data is stored in memory. In a real-world application, a database would be used.
-How to Use
+How to Use:
         Register a Client: Use the "Client Management" section to register a new client by providing their details.
         Enroll a Client in a Program: Use the "Client Enrollment in Health Programs" section to enroll a client in a program.
         Search for a Client: Use the "Search Client Records" section to search for a client by ID or name.
@@ -46,5 +47,5 @@ search_clients(search_term): Searches for clients.
 get_client_profile(client_id): Retrieves a client's profile.
 Test Cases - The health_info.py script includes a series of test cases in the if __name__ == "__main__": block to demonstrate the functionality of the simulated API.
 These tests cover:Client registration (including duplicate registration and invalid date format)Client enrollment (including invalid program and duplicate enrollment)Client searchViewing client profiles
-Future Enhancements
+Future Enhancements:
 Implement a full-fledged backend using a web framework (e.g., Flask).Integrate with a database (e.g., PostgreSQL).Implement user authentication and authorization.Add more comprehensive error handling.Implement a more robust front-end.Add unit tests.Deploy the application.
