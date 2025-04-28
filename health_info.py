@@ -1,4 +1,9 @@
+from flask import Flask, jsonify, request, render_template
 import datetime
+from flask_cors import CORS  # Import CORS
+
+app = Flask(__name__)
+CORS(app)  # Enable CORS for all routes, or specify origins if needed
 
 # Store client data.  Using a dictionary for simplicity,
 # but in a real application, this would be a database.
@@ -6,6 +11,8 @@ clients = {}
 
 # Store enrollment data.
 enrollments = []
+
+client_id_counter = 0  # Initialize counter outside the function
 
 def generate_client_id():
     """
@@ -17,7 +24,7 @@ def generate_client_id():
     client_id_counter += 1
     return f"CLIENT-{client_id_counter:04d}"  # Ensure 4 digits with leading zeros
 
-client_id_counter = 0 # Initialize counter
+
 
 def register_client(name, dob, contact_info):
     """
@@ -30,32 +37,28 @@ def register_client(name, dob, contact_info):
 
     Returns:
         dict: The newly registered client's data, including the generated ID.
-              Returns None if there is an error.
+        str:  Error message, None if no error.
     """
     try:
         # Basic input validation
         if not name or not dob or not contact_info:
-            print("Error: Name, date of birth, and contact information are required.")
-            return None
+            return None, "Name, date of birth, and contact information are required."
 
         datetime.datetime.strptime(dob, "%Y-%m-%d")  # Check DOB format
 
         client_id = generate_client_id()
         client = {
-            "client_id": client_id,
+            "id": client_id,  # Changed from "client_id" to "id" to match frontend
             "name": name,
             "dob": dob,
-            "contact_info": contact_info,
+            "contact": contact_info, # Changed from "contact_info" to "contact"
         }
         clients[client_id] = client
-        print(f"Client registered successfully: {client}")
-        return client
+        return client, None
     except ValueError:
-        print("Error: Invalid date format. Please use %Y-%m-%d.")
-        return None
+        return None, "Invalid date format. Please use %Y-%m-%d."
     except Exception as e:
-        print(f"An unexpected error occurred: {e}")
-        return None
+        return None, f"An unexpected error occurred: {e}"
 
 
 
@@ -67,16 +70,15 @@ def enroll_client_in_program(client_id, program):
         client_id (str): The ID of the client to enroll.
         program (str): The name of the health program.
 
-     Returns:
-        dict:  Returns the enrollment data if successful, None otherwise
+    Returns:
+        dict: Returns the enrollment data if successful, None otherwise
+        str: Error message, None if no error.
     """
     if not client_id or not program:
-        print("Error: Client ID and program name are required.")
-        return None
+        return None, "Client ID and program name are required."
 
     if client_id not in clients:
-        print(f"Error: Client with ID {client_id} not found.")
-        return None
+        return None, f"Client with ID {client_id} not found."
 
     # Check for valid program (optional, but good practice)
     valid_programs = [
@@ -89,23 +91,20 @@ def enroll_client_in_program(client_id, program):
         "Emergency Care Training"
     ]
     if program not in valid_programs:
-        print(f"Error: Invalid program name: {program}")
-        return None
+        return None, f"Invalid program name: {program}"
 
-    # Check if already enrolled (optional, depending on requirements)
+    # Check if already enrolled
     for enrollment in enrollments:
-        if enrollment["client_id"] == client_id and enrollment["program"] == program:
-            print(f"Client {client_id} is already enrolled in {program}.")
-            return None
+        if enrollment["clientId"] == client_id and enrollment["program"] == program: # changed client_id
+            return None, f"Client {client_id} is already enrolled in {program}."
 
     enrollment_data = {
-        "client_id": client_id,
+        "clientId": client_id, # changed client_id
         "program": program,
-        "enrollment_date": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+        "enrollmentDate": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"), # changed enrollment_date
     }
     enrollments.append(enrollment_data)
-    print(f"Client {client_id} enrolled in {program} successfully.")
-    return enrollment_data
+    return enrollment_data, None
 
 
 
@@ -117,18 +116,17 @@ def search_clients(search_term):
         search_term (str): The ID or name to search for.
 
     Returns:
-        list: A list of matching client records.  Empty list if no matches.
+        list: A list of matching client records. Empty list if no matches.
+        str: Error message, None if no error.
     """
     if not search_term:
-        print("Error: Search term is required.")
-        return []
+        return [], "Search term is required."
 
     results = []
     for client_id, client in clients.items():
-        if search_term.lower() in client["client_id"].lower() or search_term.lower() in client["name"].lower():
+        if search_term.lower() in client["id"].lower() or search_term.lower() in client["name"].lower(): # changed client_id
             results.append(client)
-    print(f"Search results for '{search_term}': {results}")
-    return results
+    return results, None
 
 
 
@@ -141,17 +139,17 @@ def get_client_profile(client_id):
 
     Returns:
         dict: The client's profile information, or None if not found.
+        str: Error message, None if no error.
     """
     if not client_id:
-        print("Error: Client ID is required.")
-        return None
+        return None, "Client ID is required."
 
     if client_id not in clients:
-        print(f"Error: Client with ID {client_id} not found.")
-        return None
+        return None, f"Client with ID {client_id} not found."
 
-    print(f"Client profile for {client_id}: {clients[client_id]}")
-    return clients[client_id]
+    return clients[client_id], None
+
+
 
 def get_enrollments_by_client(client_id):
     """
@@ -161,81 +159,91 @@ def get_enrollments_by_client(client_id):
         client_id (str): The ID of the client.
 
     Returns:
-       list: A list of enrollment records for the client.
+        list: A list of enrollment records for the client.
+        str: Error message, None if no error.
     """
     if not client_id:
-        print("Error: Client ID is required.")
-        return []
-    client_enrollments = [e for e in enrollments if e['client_id'] == client_id]
-    return client_enrollments
+        return [], "Client ID is required."
+    client_enrollments = [e for e in enrollments if e['clientId'] == client_id] # changed client_id
+    return client_enrollments, None
 
-def display_all_clients():
+# Flask routes to integrate with your HTML
+@app.route('/')
+def index():
+    return render_template('index.html')  # Make sure index.html is in a folder named templates
+
+@app.route('/api/clients', methods=['POST'])
+def api_register_client():
     """
-    Displays all registered clients.  For debugging.
+    API endpoint to register a new client.
+    Handles POST requests with client data.
+    Returns JSON response.
     """
-    if not clients:
-        print("No clients registered.")
-        return
-    print("All Clients:")
-    for client_id, client in clients.items():
-        print(f"  {client_id}: {client}")
+    data = request.get_json()
+    name = data.get('name')
+    dob = data.get('dob')
+    contact_info = data.get('contact') # Changed from contact_info
+    client, error = register_client(name, dob, contact_info)
+    if error:
+        return jsonify({'error': error}), 400  # Use 400 for bad request
+    return jsonify({'message': 'Client registered successfully', 'client': client}), 201 # Added client
 
-def display_all_enrollments():
+
+@app.route('/api/enrollments', methods=['POST'])
+def api_enroll_client():
     """
-    Displays all enrollments. For debugging.
+    API endpoint to enroll a client in a program.
+    Handles POST requests with client ID and program data.
+    Returns JSON response.
     """
-    if not enrollments:
-        print("No enrollments.")
-        return
-    print("All Enrollments:")
-    for enrollment in enrollments:
-        print(f"  {enrollment}")
+    data = request.get_json()
+    client_id = data.get('clientId') # Changed from client_id
+    program = data.get('program')
+    enrollment, error = enroll_client_in_program(client_id, program)
+    if error:
+        return jsonify({'error': error}), 400  # Use 400 for bad request
+    return jsonify({'message': 'Client enrolled successfully', 'enrollment': enrollment}), 201 # Added enrollment
 
-if __name__ == "__main__":
-    #  Run a simple test scenario
-    print("\n")
-    print("Starting Health Info Connect API Test...")
 
-    # Register some clients
-    client1 = register_client("Alice Smith", "1990-05-15", "555-1234")
-    client2 = register_client("Bob Johnson", "1985-10-22", "555-5678")
-    client3 = register_client("Alice Smith", "1990-05-15", "555-1234") #duplicate
-    client4 = register_client("Bob Johnson", "1985-10-22", "555-5678")
-    client5 = register_client("Charlie Brown", "2001-03-01", "555-9012")
-    client6 = register_client("Diana Miller", "1998-07-10", "555-2345")
+@app.route('/api/clients/search', methods=['GET'])
+def api_search_clients():
+    """
+    API endpoint to search for clients.
+    Handles GET requests with a search term.
+    Returns JSON response.
+    """
+    search_term = request.args.get('term')  # Get the 'term' from the query string
+    results, error = search_clients(search_term)
+    if error:
+        return jsonify({'error': error}), 400
+    return jsonify({'results': results}), 200  # Changed 'result' to 'results'
 
-    #check invalid date
-    client_invalid_date = register_client("Eve Green", "2023-14-01", "555-2345")
 
-    # Enroll clients in programs
-    enrollment1 = enroll_client_in_program("CLIENT-0001", "TB Program")
-    enrollment2 = enroll_client_in_program("CLIENT-0002", "Malaria Program")
-    enrollment3 = enroll_client_in_program("CLIENT-0001", "HIV Program")
-    enrollment4 = enroll_client_in_program("CLIENT-0003", "Invalid Program") # Invalid program
-    enrollment5 = enroll_client_in_program("CLIENT-0005", "Nutrition Counseling Program")
-    enrollment6 = enroll_client_in_program("CLIENT-0005", "Nutrition Counseling Program") #duplicate enrollment
+@app.route('/api/clients/<client_id>', methods=['GET'])
+def api_get_client_profile(client_id):
+    """
+    API endpoint to get a client's profile.
+    Handles GET requests with a client ID.
+    Returns JSON response.
+    """
+    profile, error = get_client_profile(client_id)
+    if error:
+        return jsonify({'error': error}), 404  # Use 404 for not found
+    enrollments, _ = get_enrollments_by_client(client_id) # Get enrollments for the client
+    return jsonify({'client': profile, 'enrollments': enrollments}), 200 # Return both
 
-    #check client does not exist
-    enrollment7 = enroll_client_in_program("CLIENT-0010", "Nutrition Counseling Program")
 
-    # Search for clients
-    search_results1 = search_clients("Alice")
-    search_results2 = search_clients("Smith")
-    search_results3 = search_clients("CLIENT-0002")
-    search_results4 = search_clients("xyz")  # No results
+@app.route('/api/client_enrollments/<client_id>', methods=['GET']) # Not used in current js
+def api_get_enrollments_by_client(client_id):
+    """
+    API endpoint to get a client's enrollments.
+    Handles GET requests with a client ID.
+    Returns JSON response.
+    """
+    enrollments, error = get_enrollments_by_client(client_id)
+    if error:
+        return jsonify({'error': error}), 400
+    return jsonify({'enrollments': enrollments}), 200
 
-    # View client profiles
-    profile1 = get_client_profile("CLIENT-0001")
-    profile2 = get_client_profile("CLIENT-0002")
-    profile3 = get_client_profile("CLIENT-0010")  # Client not found
-
-    # Get enrollments by client
-    enrollments_client1 = get_enrollments_by_client("CLIENT-0001")
-    enrollments_client2 = get_enrollments_by_client("CLIENT-0010") #client not found
-
-    # Display all data (for demonstration)
-    display_all_clients()
-    display_all_enrollments()
-
-    print("\n")
-    print("End of Test.")
+if __name__ == '__main__':
+    app.run(debug=True, host='0.0.0.0')
