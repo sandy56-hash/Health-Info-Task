@@ -3,6 +3,8 @@ Health Info Connect: A Basic Health Information System
 Overview:
 Health Info Connect is a basic health information system designed to manage client data and program enrollments. 
 
+To access the site: https://sandy56-hash.github.io/Health-Info-Task/
+
 This system allows healthcare providers to:
 
            Create and manage health programs (e.g., TB, Malaria, HIV).Register new clients.
